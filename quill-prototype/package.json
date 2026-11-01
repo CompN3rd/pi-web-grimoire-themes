@@ -1,0 +1,9 @@
+{
+  "name": "pi-web-quill-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "files": ["browser", "README.md"],
+  "piWeb": { "plugins": [{ "id": "quill-prototype", "browserRoot": "browser", "module": "plugin.js" }] }
+}

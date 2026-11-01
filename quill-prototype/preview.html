@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Quill — isolated simulated preview</title>
+<body style="margin:0;background:#26251f"><script type="module">
+import plugin from './browser/plugin.js';
+const lifetime = new AbortController();
+// Minimal public-template harness; the installed host supplies its own html tag.
+const result = plugin.activate({ html: (strings, ...values) => ({ strings, values }), lifetimeSignal: lifetime.signal });
+const template = result.contributions.applicationPanels[0].render();
+const panel = document.createElement('grimoire-quill-prototype');
+panel.lifetime = template.values[0];
+document.body.append(panel);
+window.previewLifetime = lifetime;
+</script></body></html>
