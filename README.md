@@ -1,6 +1,6 @@
 # Grimoire themes for Pi Web
 
-Six wizardly volumes for agentic work: three quiet manuscript palettes and three more expressive, handwritten paper editions. Ink, aged pages, illuminated margins, and a small seal on the composer's default action. Visual themes only—your prompts, shortcuts, and tools work exactly as before.
+Six wizardly volumes for agentic work: three quiet manuscript palettes and three more expressive, handwritten paper editions. Ink, aged pages, illuminated margins, and a small seal on the composer's default action. The visual themes leave your prompts, shortcuts, and tools unchanged. An optional **Wizardly English** language pack adds matching interface wording.
 
 | Volume | Appearance | Character | Theme ID |
 | --- | --- | --- | --- |
@@ -63,9 +63,35 @@ ln -s /data/projects/pi-web-grimoire-themes "${PI_WEB_DATA_DIR:-$HOME/.pi-web}/p
 
 Choose one installation method. Don't overwrite an existing `grimoire` link without checking its target. Theme assets are served from `assets/` only; previews and tests are not browser-public plugin assets.
 
-**No session-daemon restart, server module, or browser JavaScript plugin is needed.** This repository has not been installed into the live instance. It does not replace or modify Pendant. Themes installed only on a remote fleet machine are ignored by the gateway. An enforced gateway theme policy may lock the theme picker.
+**The visual themes need no session-daemon restart, server module, or browser JavaScript plugin.** The optional language pack uses a separate browser-only entry. This repository has not been installed into the live instance. It does not replace or modify Pendant. Themes installed only on a remote fleet machine are ignored by the gateway. An enforced gateway theme policy may lock the theme picker.
 
 To uninstall, first select a built-in theme, then remove the package in Settings (or remove only the developer symlink you created) and reload the browser. CSS-only changes likewise need a browser reload.
+
+## Optional wizardly wording
+
+On a localization-capable Pi Web host, enable **grimoire-language** (Grimoire / Wizardly English) in **Settings → PI WEB plugins** on the gateway, then reload the browser. In **Settings → General → Language and region**, select **en-grimoire** (the picker may display it as an English variant) and apply it to this browser. The pack is disabled by default; it requires no daemon restart.
+
+| Ordinary wording | Wizardly wording |
+| --- | --- |
+| Send message | Cast incantation |
+| Queue message | Ready the next spell |
+| Steer current response | Bend the spell |
+| Thinking level / reasoning effort | Spell power |
+| Thinking | Consulting the aether |
+| Agent running | weaving a spell… |
+| Compacting history | Bottling memories |
+| Load earlier messages | Unfurl earlier scrolls |
+| Action palette | Grimoire of deeds |
+| Stop current work | Break the spell — stop current work |
+| Clear queue | Dismiss waiting incantations |
+| Remove attachment | Unbind attachment |
+| Compaction cancelled | Memory bottling cancelled |
+
+Spell power ranges from “A candlewick spark” to “By all the ancient powers”; it names reasoning effort, not an elapsed duration or a promise of correctness. Model names, reasoning values, token estimates, and shortcuts retain their technical meaning. Stop, queue removal, cancellation, and selected failures also get wizardly wording, but explicitly retain their consequences: stopping work and clearing the queue, a message not being sent, or an operation failing. Permanent deletion and confirmation dialogs remain unchanged. Unlisted text falls back to normal English. Conversations, prompts, code, and tool output are never rewritten. The full partial catalogs live in `assets/language/catalogs.js`.
+
+Language and theme selection are independent: this wording works with all twelve Grimoire editions, stays selected when changing themes, and can also accompany other palettes. Choose **English** to restore ordinary wording, or disable **grimoire-language** and reload. Regional formats and time-zone settings remain independent. The static preview gallery does not run the language plugin.
+
+For a live check, select the language, inspect the composer’s accessible names and spell-power picker, open the action palette, and observe a running session. Confirm Stop and failure text retain explicit operational meaning (including clearing the queue), then switch back to English and confirm ordinary labels return. Also check narrow-screen layout with the longer labels. Unit tests exercise catalog registration and copy safeguards; they do not replace these host/browser checks.
 
 ## Design and accessibility
 
@@ -75,7 +101,7 @@ To uninstall, first select a built-in theme, then remove the package in Settings
 - User messages have a double leading rule; assistant messages a single rule. Current rows and selected choices retain structural cues, not colour alone.
 - Busy sessions kindle twice (3.2s total in Quiet, 4.4s in Spellbound). Selected bookmark hems catch light, message margins draw a short ink stroke on hover/focus, the default composer seal turns once, and opening menus briefly illuminate their borders. Text, click targets and reading surfaces stay still. No ambient loops or automatic message entrances.
 - All theme-owned motion requires `prefers-reduced-motion: no-preference` and inactive forced colours; changing either preference stops it immediately. Hover effects require real hover capability. Static borders, selection and focus remain. Already-selected/busy elements can animate on mount or theme change—these are decorations, not new-output or success signals.
-- Native focus, disabled/hidden states, labels, popover positioning, and Stop remain owned by Pi Web. No text replacement, click interception, or spellcasting behavior is added.
+- Native focus, disabled/hidden states, labels, popover positioning, and Stop remain owned by Pi Web. CSS never replaces text or intercepts clicks. The optional language pack changes labels through host localization only; it adds no spellcasting behavior.
 
 ## Checks and development
 

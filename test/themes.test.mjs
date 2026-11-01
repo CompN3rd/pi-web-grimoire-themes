@@ -15,7 +15,7 @@ function contrast(a, b) {
   return (high + .05) / (low + .05);
 }
 
-test('declarative-only package with six palettes and two locally contained motion editions each', async () => {
+test('declarative theme entry with six palettes and two locally contained motion editions each', async () => {
   assert.equal(plugin.id, 'grimoire');
   assert.equal(plugin.browserRoot, 'assets');
   assert.equal(plugin.module, undefined);

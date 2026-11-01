@@ -25,6 +25,11 @@
         { "id": "forgotten", "name": "Forgotten Folio", "description": "Slanted ink, faded foxed paper, and quiet enchantment.", "colorScheme": "light", "order": 150, "stylesheets": [{ "id": "palette", "path": "forgotten.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "paper", "path": "paper.css", "order": 300 }, { "id": "motion", "path": "motion.css", "order": 400 }] },
         { "id": "forgotten-spellbound", "name": "Forgotten Folio · Spellbound", "description": "The same volume with more theatrical, finite magical motion.", "colorScheme": "light", "order": 151, "stylesheets": [{ "id": "palette", "path": "forgotten.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "paper", "path": "paper.css", "order": 300 }, { "id": "motion", "path": "motion.css", "order": 400 }, { "id": "spellbound", "path": "spellbound.css", "order": 500 }] }
       ]
+    }, {
+      "id": "grimoire-language",
+      "browserRoot": "assets/language",
+      "module": "pi-web-plugin.js",
+      "defaultEnabled": false
     }]
   }
 }
