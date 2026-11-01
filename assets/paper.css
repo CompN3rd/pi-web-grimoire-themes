@@ -1,4 +1,11 @@
 /* Handwritten variants only. UI stays sans-serif; prose inherits the hand. */
+/* Shell host selectors are version-sensitive (not supported conversation hooks).
+   Keep panels/controls opaque; only the broad canvas receives softer paper. */
+:root, body, :host(pi-web-app), :host(workspace-panel) {
+  background-color: var(--pi-bg);
+  background-image: linear-gradient(color-mix(in srgb, var(--pi-bg) 55%, transparent), color-mix(in srgb, var(--pi-bg) 55%, transparent)), var(--grimoire-paper);
+  background-size: auto, 420px 420px;
+}
 :host(chat-view) .chat-message {
   background-image: var(--grimoire-paper), linear-gradient(90deg, var(--grimoire-wear), transparent 7%, transparent 93%, var(--grimoire-wear));
   background-size: 420px 420px, 100% 100%;
@@ -23,6 +30,9 @@ button, input, textarea, select {
   font-family: var(--pi-font);
 }
 @media (forced-colors: active) {
+  :root, body, :host(pi-web-app), :host(workspace-panel) {
+    background-image: none;
+  }
   :host(chat-view) .chat-message {
     background-image: none;
     box-shadow: none;

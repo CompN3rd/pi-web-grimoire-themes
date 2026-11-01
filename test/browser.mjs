@@ -15,7 +15,7 @@ try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1200 }, reducedMotion: 'reduce' });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  page.on('response', r => { if (!r.ok()) errors.push(`${r.status()} ${r.url()}`); });
+  page.on('response', r => { if (!r.ok() && r.status() !== 304) errors.push(`${r.status()} ${r.url()}`); });
   page.on('request', r => assert.equal(new URL(r.url()).hostname, '127.0.0.1'));
   for (const [id, font] of [['hedgewitch', 'Caveat'], ['scribe', 'Charm'], ['forgotten', 'Marck Script']]) {
     await page.goto(`http://127.0.0.1:4174/previews/#${id}`);
@@ -27,23 +27,30 @@ try {
       return {
         loaded: document.fonts.check(`22px "${font}"`), prose: style('.chat-message-body').fontFamily,
         code: style('pre').fontFamily, paper: style('.chat-message').backgroundImage,
+        canvas: getComputedStyle(document.body).backgroundImage,
+        codeBackground: style('pre').backgroundImage,
+        controlBackground: getComputedStyle(document.querySelector('prompt-editor').shadowRoot.querySelector('textarea')).backgroundImage,
         control: getComputedStyle(document.querySelector('prompt-editor').shadowRoot.querySelector('button')).fontFamily,
         animation: getComputedStyle(document.querySelector('session-list').shadowRoot.querySelector('[data-busy]')).animationName
       };
     }, font);
     assert.ok(result.loaded); assert.ok(result.prose.includes(font));
     assert.match(result.code, /monospace/); assert.match(result.control, /system-ui/);
-    assert.match(result.paper, /textures/); assert.equal(result.animation, 'none');
+    assert.match(result.paper, /textures/); assert.match(result.canvas, /textures/);
+    assert.equal(result.codeBackground, 'none'); assert.equal(result.controlBackground, 'none');
+    assert.equal(result.animation, 'none');
     if (process.argv.includes('--capture')) await page.screenshot({ path: `previews/${id}.png`, fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
     await page.emulateMedia({ forcedColors: 'active' });
     assert.equal(await page.locator('chat-view .chat-message').first().evaluate(e => getComputedStyle(e).backgroundImage), 'none');
+    assert.equal(await page.locator('body').evaluate(e => getComputedStyle(e).backgroundImage), 'none');
     await page.emulateMedia({ forcedColors: 'none' });
     await page.setViewportSize({ width: 1440, height: 1200 });
     await page.selectOption('#theme', 'candlelit');
     assert.equal(await page.locator('chat-view').evaluate(e => e.shadowRoot.querySelector('[data-paper]')), null);
-    console.log(`${id}: local font, paper, monospace, controls, reduced motion, mobile, forced colours, removal passed`);
+    assert.equal(await page.locator('body').evaluate(e => getComputedStyle(e).backgroundImage), 'none');
+    console.log(`${id}: local font, paper/canvas, solid code/controls, reduced motion, mobile, forced colours, removal passed`);
   }
   assert.deepEqual(errors, []);
 } finally {

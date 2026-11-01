@@ -68,7 +68,7 @@ To uninstall, first select a built-in theme, then remove the package in Settings
 ## Design and accessibility
 
 - The original three retain their system-serif UI. The paper editions use bundled OFL handwriting fonts at 21–22px for conversation prose and a system sans-serif for controls, navigation and metadata. Code remains monospaced, and terminal geometry is unchanged. Unsupported glyphs fall back to local fonts; the handwriting fonts do not cover every writing system.
-- Static local SVG textures provide mottling, fibres and foxing; inset shading wears the page edges without clipping text or changing hit targets. Forced colours removes the paper effects. Font loading uses `swap`, so prose remains visible while loading.
+- Static local SVG textures provide mottling, fibres and foxing across the overall app canvas as well as message surfaces. The canvas texture is softened beneath a 55% base-colour wash; messages retain stronger paper detail and worn edges. Code blocks, inputs, and controls keep solid backgrounds. Shell host selectors (`pi-web-app`, `workspace-panel`) are version-sensitive and should be rechecked on host upgrades; opaque plugin-owned panels can cover the canvas. Inset shading wears the page edges without clipping text or changing hit targets. Forced colours removes the paper effects. Font loading uses `swap`, so prose remains visible while loading.
 - User messages have a double leading rule; assistant messages a single rule. Current rows and selected choices retain structural cues, not colour alone.
 - Busy sessions receive two quiet 2.4-second illuminations. Hovering the default composer action turns its small diamond seal once. Neither effect changes layout or interaction.
 - Motion is opt-in through `prefers-reduced-motion: no-preference`; reduced-motion users get static decoration. Forced-colour mode keeps borders and a current-row outline.
@@ -92,6 +92,6 @@ PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node test/browser.mjs
 # Add --capture to regenerate the three handwritten PNG previews.
 ```
 
-This launches a temporary loopback-only static server on port 4174 and closes it afterward. It checks local font loading, paper, code/control fonts, mobile overflow, reduced motion, forced colours, and paper removal on theme switching. `previews/` is a standalone specimen gallery, not application code. No build step or runtime dependencies.
+This launches a temporary loopback-only static server on port 4174 and closes it afterward. It checks local font loading, message/canvas paper, solid code/control backgrounds and fonts, mobile overflow, reduced motion, forced colours, and paper removal on theme switching. `previews/` is a standalone specimen gallery, not application code. No build step or runtime dependencies.
 
 CSS, gallery, and original procedural textures are MIT licensed. Bundled fonts retain their SIL OFL 1.1 licenses and copyright notices; see [asset attribution](assets/ATTRIBUTION.md). Local delivery only; no remote repository or published package is implied.

@@ -56,8 +56,7 @@ const select = document.querySelector('#theme');
 function choose(id) {
   if (!Object.hasOwn(themes, id)) id = 'candlelit';
   select.value = id;
-  for (const tag of Object.keys(templates)) {
-    const root = document.querySelector(tag).shadowRoot;
+  for (const root of [document.head, ...Object.keys(templates).map(tag => document.querySelector(tag).shadowRoot)]) {
     root.querySelector('[data-paper]')?.remove();
     if (['hedgewitch', 'scribe', 'forgotten'].includes(id)) {
       const link = document.createElement('link');
