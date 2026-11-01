@@ -1,5 +1,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; padding: 36px clamp(16px, 5vw, 72px); background: var(--pi-bg); color: var(--pi-text); font: 17px/1.6 var(--pi-font); }
+app-mobile-main-tabs { display: block; max-width: 1180px; margin: 24px auto 0; }
+workspace-panel { display: block; margin-block-end: 18px; }
 header, main, footer { max-width: 1180px; margin-inline: auto; }
 h1 { font-size: clamp(32px, 5vw, 56px); font-weight: 400; line-height: 1.15; margin: 10px 0; }
 h2 { font-size: 20px; font-weight: 400; }

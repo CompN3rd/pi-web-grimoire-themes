@@ -58,6 +58,70 @@
   text-decoration: underline dotted;
   text-underline-offset: 3px;
 }
+/* Panel bookmarks. Shell hosts are version-sensitive; do not style renderer
+   choices, navigation-menu triggers, or panel-collapse controls as ribbons.
+   Only the decorative backing is clipped: labels and focus stay rectangular. */
+:host(app-mobile-main-tabs) .ui-tabs,
+:host(workspace-panel) .ui-tabs {
+  gap: 6px;
+  padding-inline: 6px;
+}
+:host(app-mobile-main-tabs) .ui-tabs > button.ui-tab:not([data-navigation-trigger]),
+:host(workspace-panel) .ui-tabs > button.ui-tab:not([data-navigation-trigger]) {
+  --grimoire-ribbon-fill: var(--pi-surface);
+  position: relative;
+  isolation: isolate;
+  min-block-size: 56px;
+  min-inline-size: 44px;
+  padding: 8px 16px 18px;
+  border: 0;
+  border-block-start: 3px solid var(--pi-border);
+  border-radius: 0;
+  background: transparent;
+  color: var(--pi-text);
+  box-shadow: none;
+  font-family: var(--pi-font);
+}
+:host(app-mobile-main-tabs) .ui-tabs > button.ui-tab:not([data-navigation-trigger])::before,
+:host(workspace-panel) .ui-tabs > button.ui-tab:not([data-navigation-trigger])::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: var(--grimoire-ribbon-fill);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 9px), 0 100%);
+  pointer-events: none;
+}
+:host(app-mobile-main-tabs) .ui-tabs > button.ui-tab:not([data-navigation-trigger]):hover:not(:disabled, .selected, [aria-pressed="true"], [aria-current="page"]),
+:host(workspace-panel) .ui-tabs > button.ui-tab:not([data-navigation-trigger]):hover:not(:disabled, .selected, [aria-pressed="true"], [aria-current="page"]) {
+  --grimoire-ribbon-fill: var(--pi-surface-hover);
+}
+:host(app-mobile-main-tabs) .ui-tabs > button.ui-tab:not([data-navigation-trigger]):is(.selected, [aria-pressed="true"], [aria-current="page"]),
+:host(workspace-panel) .ui-tabs > button.ui-tab:not([data-navigation-trigger]):is(.selected, [aria-pressed="true"], [aria-current="page"]) {
+  --grimoire-ribbon-fill: var(--pi-accent);
+  color: var(--pi-bg);
+  border-block-start-color: var(--pi-accent);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+:host(app-mobile-main-tabs) .ui-tabs > button.ui-tab:not([data-navigation-trigger]):focus-visible,
+:host(workspace-panel) .ui-tabs > button.ui-tab:not([data-navigation-trigger]):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -4px;
+}
+@media (forced-colors: active) {
+  :host(app-mobile-main-tabs) .ui-tabs > button.ui-tab:not([data-navigation-trigger]),
+  :host(workspace-panel) .ui-tabs > button.ui-tab:not([data-navigation-trigger]) {
+    border: 1px solid ButtonText;
+    border-block-start-width: 3px;
+    color: ButtonText;
+  }
+  :host(app-mobile-main-tabs) .ui-tabs > button.ui-tab:not([data-navigation-trigger])::before,
+  :host(workspace-panel) .ui-tabs > button.ui-tab:not([data-navigation-trigger])::before {
+    background: Canvas;
+  }
+}
 /* A brief illumination when a session becomes busy, never an endless pulse.
    Only shadow changes: no moving text, scroll shifts, overlays or click targets. */
 @media (prefers-reduced-motion: no-preference) {

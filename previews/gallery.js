@@ -20,8 +20,14 @@ const base = `@layer pi-web-base {
   .ui-composer-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding-top: 12px; }
   textarea { width: 100%; resize: vertical; min-height: 85px; padding: 14px; margin-top: 22px; background: var(--pi-surface); border: 1px solid var(--pi-border); }
   [data-ui-context="content-views"] { display: flex; gap: 4px; }
+  .ui-tabs { display: flex; overflow-x: auto; overflow-y: hidden; min-width: 0; }
+  .ui-tab { flex: 0 0 auto; white-space: nowrap; }
+  .tab-badge { font: 12px var(--pi-mono); margin-inline-start: 6px; }
+  .ui-tab.selected { background: var(--pi-selection-bg); }
 }`;
 const templates = {
+  'app-mobile-main-tabs': `<nav class="mobile-tabs ui-tabs ui-tabs--primary" aria-label="Main panel specimens"><button class="ui-button ui-tab" aria-pressed="false">Sessions</button><button class="ui-button ui-tab selected" aria-pressed="true">Chat<span class="tab-badge">2</span></button><button class="ui-button ui-tab" aria-pressed="false">Files</button><button class="ui-button ui-tab" aria-pressed="false">Terminal</button><button class="ui-button ui-tab" aria-pressed="false">Git</button><button class="ui-button ui-tab" data-navigation-trigger aria-label="Navigation">☰</button></nav>`,
+  'workspace-panel': `<div class="ui-tabs ui-tabs--primary" aria-label="Workspace panel specimens"><button class="ui-button ui-tab selected" aria-pressed="true">Files</button><button class="ui-button ui-tab" aria-pressed="false">Terminal</button><button class="ui-button ui-tab" aria-pressed="false">Git</button><button class="ui-button ui-tab" disabled aria-pressed="false">Unavailable</button></div>`,
   'session-list': `<div data-ui-context="sessions"><div class="ui-nav-list">
     <div class="ui-nav-row" tabindex="0" data-current="true" aria-current="true" data-busy="true"><div class="ui-nav-row-main"><div class="ui-nav-row-label">Inscribe the star chart</div><div class="ui-nav-row-meta">Working · 3 tools</div></div></div>
     <div class="ui-nav-row" tabindex="0" data-current="false" data-unread="true"><div class="ui-nav-row-main"><div class="ui-nav-row-label">The herbarium</div><div class="ui-nav-row-meta">Unread · complete</div></div></div>
@@ -41,6 +47,15 @@ for (const [tag, markup] of Object.entries(templates)) {
     constructor() {
       super();
       this.attachShadow({ mode: 'open' }).innerHTML = `<style>${base}</style><link rel="stylesheet" href="../assets/manuscript.css">${markup}`;
+      // Specimen-only interaction; production navigation remains host-owned.
+      this.shadowRoot.addEventListener('click', event => {
+        const button = event.target.closest('button.ui-tab:not([data-navigation-trigger])');
+        if (!button || button.disabled) return;
+        for (const tab of this.shadowRoot.querySelectorAll('button.ui-tab:not([data-navigation-trigger])')) {
+          tab.classList.toggle('selected', tab === button);
+          tab.setAttribute('aria-pressed', String(tab === button));
+        }
+      });
     }
   });
 }

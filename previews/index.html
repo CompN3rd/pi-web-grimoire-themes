@@ -15,9 +15,10 @@
     <p id="description">Ivory parchment, oxblood ink, and warm brass illumination.</p>
     <label>Open a volume <select id="theme"><option value="candlelit">Candlelit Folio · light</option><option value="astral">Astral Grimoire · dark</option><option value="verdant">Verdant Codex · dark</option><option value="hedgewitch">Hedgewitch’s Journal · light</option><option value="scribe">Scribe’s Spellbook · light</option><option value="forgotten">Forgotten Folio · light</option></select></label>
   </header>
+  <app-mobile-main-tabs></app-mobile-main-tabs>
   <main>
     <aside><h2>The library</h2><session-list></session-list><p class="note">A quiet glow marks active work. The small seal turns on hover. Reduced motion disables both.</p></aside>
-    <section aria-label="Conversation specimen"><chat-view></chat-view><pi-web-content-renderer></pi-web-content-renderer><prompt-editor></prompt-editor></section>
+    <section aria-label="Conversation specimen"><workspace-panel></workspace-panel><chat-view></chat-view><pi-web-content-renderer></pi-web-content-renderer><prompt-editor></prompt-editor></section>
   </main>
   <footer>Illustrative component specimens, not a live Pi Web screenshot. Uses the shipped palettes and manuscript CSS in shadow roots; layout scaffolding is preview-only. No requests leave this server.</footer>
 </body>

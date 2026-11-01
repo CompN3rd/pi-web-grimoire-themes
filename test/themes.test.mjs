@@ -81,6 +81,21 @@ test('handwritten editions bundle distinct fonts, licensed textures, and code sa
   assert.doesNotMatch(paper, /!important|animation:|transform:/);
 });
 
+test('all volumes share scoped ribbon bookmarks with structural selection and focus', async () => {
+  for (const theme of plugin.themes) assert.ok(theme.stylesheets.some(s => s.path === 'manuscript.css'));
+  const text = await css('manuscript.css');
+  assert.match(text, /:host\(app-mobile-main-tabs\)/);
+  assert.match(text, /:host\(workspace-panel\)/);
+  assert.match(text, /:not\(\[data-navigation-trigger\]\)/);
+  assert.match(text, /min-block-size: 56px/);
+  assert.match(text, /min-inline-size: 44px/);
+  assert.match(text, /:focus-visible/);
+  assert.match(text, /outline: 2px solid currentColor/);
+  assert.match(text, /clip-path: polygon/);
+  assert.match(text, /text-decoration: underline/);
+  assert.match(text, /color: ButtonText/);
+});
+
 test('decorations preserve native state and limit motion', async () => {
   const text = await css('manuscript.css');
   assert.match(text, /prefers-reduced-motion: no-preference/);
