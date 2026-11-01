@@ -24,8 +24,10 @@ const base = `@layer pi-web-base {
   .ui-tab { flex: 0 0 auto; white-space: nowrap; }
   .tab-badge { font: 12px var(--pi-mono); margin-inline-start: 6px; }
   .ui-tab.selected { background: var(--pi-selection-bg); }
+  .ui-popup-panel { background: var(--pi-surface); color: var(--pi-text); padding: 20px; }
 }`;
 const templates = {
+  'grimoire-menu': `<button popovertarget="specimen-menu">Open menu specimen</button><div id="specimen-menu" class="ui-popup-panel ui-menu" popover><p>Bookmark this spell</p><button popovertarget="specimen-menu" popovertargetaction="hide">Close</button></div>`,
   'app-mobile-main-tabs': `<nav class="mobile-tabs ui-tabs ui-tabs--primary" aria-label="Main panel specimens"><button class="ui-button ui-tab" aria-pressed="false">Sessions</button><button class="ui-button ui-tab selected" aria-pressed="true">Chat<span class="tab-badge">2</span></button><button class="ui-button ui-tab" aria-pressed="false">Files</button><button class="ui-button ui-tab" aria-pressed="false">Terminal</button><button class="ui-button ui-tab" aria-pressed="false">Git</button><button class="ui-button ui-tab" data-navigation-trigger aria-label="Navigation">☰</button></nav>`,
   'workspace-panel': `<div class="ui-tabs ui-tabs--primary" aria-label="Workspace panel specimens"><button class="ui-button ui-tab selected" aria-pressed="true">Files</button><button class="ui-button ui-tab" aria-pressed="false">Terminal</button><button class="ui-button ui-tab" aria-pressed="false">Git</button><button class="ui-button ui-tab" disabled aria-pressed="false">Unavailable</button></div>`,
   'session-list': `<div data-ui-context="sessions"><div class="ui-nav-list">
@@ -46,7 +48,7 @@ for (const [tag, markup] of Object.entries(templates)) {
   customElements.define(tag, class extends HTMLElement {
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' }).innerHTML = `<style>${base}</style><link rel="stylesheet" href="../assets/manuscript.css">${markup}`;
+      this.attachShadow({ mode: 'open' }).innerHTML = `<style>${base}</style><link rel="stylesheet" href="../assets/manuscript.css"><link rel="stylesheet" href="../assets/motion.css">${markup}`;
       // Specimen-only interaction; production navigation remains host-owned.
       this.shadowRoot.addEventListener('click', event => {
         const button = event.target.closest('button.ui-tab:not([data-navigation-trigger])');
@@ -68,11 +70,22 @@ const themes = {
   verdant: ['Verdant Codex', 'Forest leather, pale sage lettering, and botanical gold.', 'dark']
 };
 const select = document.querySelector('#theme');
-function choose(id) {
+const motion = document.querySelector('#motion');
+function choose(selection) {
+  const spellbound = selection.endsWith('-spellbound');
+  let id = selection.replace(/-spellbound$/, '');
   if (!Object.hasOwn(themes, id)) id = 'candlelit';
   select.value = id;
+  motion.value = spellbound ? 'spellbound' : 'quiet';
   for (const root of [document.head, ...Object.keys(templates).map(tag => document.querySelector(tag).shadowRoot)]) {
     root.querySelector('[data-paper]')?.remove();
+    root.querySelector('[data-spellbound]')?.remove();
+    if (spellbound) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet'; link.href = '../assets/spellbound.css';
+      link.dataset.spellbound = '';
+      root.append(link);
+    }
     if (['hedgewitch', 'scribe', 'forgotten'].includes(id)) {
       const link = document.createElement('link');
       link.rel = 'stylesheet'; link.href = '../assets/paper.css';
@@ -82,10 +95,25 @@ function choose(id) {
   }
   document.querySelector('#palette').href = `../assets/${id}.css`;
   document.documentElement.style.colorScheme = themes[id][2];
-  document.querySelector('#title').textContent = themes[id][0];
+  document.querySelector('#title').textContent = themes[id][0] + (spellbound ? ' · Spellbound' : '');
   document.querySelector('#description').textContent = themes[id][1];
-  history.replaceState(null, '', `#${id}`);
+  history.replaceState(null, '', `#${id}${spellbound ? '-spellbound' : ''}`);
 }
-select.addEventListener('change', () => choose(select.value));
+const chooseControls = () => choose(select.value + (motion.value === 'spellbound' ? '-spellbound' : ''));
+select.addEventListener('change', chooseControls);
+motion.addEventListener('change', chooseControls);
+document.querySelector('#rekindle').addEventListener('click', () => {
+  const row = document.querySelector('session-list').shadowRoot.querySelector('[data-busy]');
+  row.dataset.busy = 'false';
+  // Flush the idle state so the CSS-only finite activity effect can be replayed.
+  void row.offsetWidth;
+  row.dataset.busy = 'true';
+});
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+const explainMotion = () => { document.querySelector('#motion-status').textContent = reducedMotion.matches
+  ? 'Reduced motion is enabled: all magical motion is suppressed. Change your OS/browser preference to preview it.'
+  : 'Select another ribbon, hover a message or the Send seal, open the menu, or rekindle the busy session. All effects settle.'; };
+reducedMotion.addEventListener('change', explainMotion);
+explainMotion();
 window.addEventListener('hashchange', () => choose(location.hash.slice(1)));
 choose(location.hash.slice(1));

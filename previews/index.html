@@ -6,6 +6,7 @@
   <title>Grimoire · Theme specimen</title>
   <link id="palette" rel="stylesheet" href="../assets/candlelit.css">
   <link rel="stylesheet" href="gallery.css">
+  <link rel="stylesheet" href="../assets/motion.css">
   <script type="module" src="gallery.js"></script>
 </head>
 <body>
@@ -14,10 +15,16 @@
     <h1 id="title">Candlelit Folio</h1>
     <p id="description">Ivory parchment, oxblood ink, and warm brass illumination.</p>
     <label>Open a volume <select id="theme"><option value="candlelit">Candlelit Folio · light</option><option value="astral">Astral Grimoire · dark</option><option value="verdant">Verdant Codex · dark</option><option value="hedgewitch">Hedgewitch’s Journal · light</option><option value="scribe">Scribe’s Spellbook · light</option><option value="forgotten">Forgotten Folio · light</option></select></label>
+    <div class="motion-lab">
+      <label>Enchantment <select id="motion"><option value="quiet">Quiet · default</option><option value="spellbound">Spellbound · expressive</option></select></label>
+      <button id="rekindle">Rekindle busy session</button>
+      <grimoire-menu></grimoire-menu>
+      <p id="motion-status" role="status"></p>
+    </div>
   </header>
   <app-mobile-main-tabs></app-mobile-main-tabs>
   <main>
-    <aside><h2>The library</h2><session-list></session-list><p class="note">A quiet glow marks active work. The small seal turns on hover. Reduced motion disables both.</p></aside>
+    <aside><h2>The library</h2><session-list></session-list><p class="note">Busy ink glows twice, then settles. Ribbons catch light on selection; message margins draw a short ink stroke on hover. The Send seal turns once. Reduced motion disables every effect.</p></aside>
     <section aria-label="Conversation specimen"><workspace-panel></workspace-panel><chat-view></chat-view><pi-web-content-renderer></pi-web-content-renderer><prompt-editor></prompt-editor></section>
   </main>
   <footer>Illustrative component specimens, not a live Pi Web screenshot. Uses the shipped palettes and manuscript CSS in shadow roots; layout scaffolding is preview-only. No requests leave this server.</footer>

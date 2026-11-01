@@ -11,7 +11,9 @@ Six wizardly volumes for agentic work: three quiet manuscript palettes and three
 | **Scribe’s Spellbook** | Light | Calligraphic Charm handwriting, aged golden parchment | `grimoire:scribe` |
 | **Forgotten Folio** | Light | Slanted Marck Script, faded paper, foxing and worn edges | `grimoire:forgotten` |
 
-These are independent volumes, not an automatic light/dark pair. Auto mode will leave each selected volume unchanged.
+Each volume now has **Quiet** (the existing name/ID) and **Spellbound** motion editions: six palettes, twelve picker entries. Choose a `· Spellbound` entry for more expressive animation; its ID adds `-spellbound`, for example `grimoire:scribe-spellbound`. Both editions share the same static design. These are independent volumes, not an automatic light/dark pair; Auto leaves each selected edition unchanged.
+
+See [Enchantment studies](MOTION.md) for the effect-by-effect comparison, design reasoning, limitations, and test instructions.
 
 ## Preview before installing
 
@@ -35,7 +37,7 @@ From this repository, run:
 npm run preview
 ```
 
-Open **http://127.0.0.1:4173/previews/** and choose a volume. Direct selections: [Candlelit](previews/index.html#candlelit), [Astral](previews/index.html#astral), [Verdant](previews/index.html#verdant), [Hedgewitch](previews/index.html#hedgewitch), [Scribe](previews/index.html#scribe), [Forgotten](previews/index.html#forgotten). Serve these files over HTTP; Git hosting may display HTML source rather than render it. If the repository is on a remote machine, forward port 4173 to your browser's machine. Stop the preview with Ctrl+C.
+Open **http://127.0.0.1:4173/previews/** and choose a volume, then use **Enchantment → Quiet / Spellbound** to compare motion. Click **Rekindle busy session**, select ribbons, hover message margins and Send, or open the menu specimen. Your system reduced-motion preference always takes priority. Static PNGs do not show animation. Direct selections: [Candlelit](previews/index.html#candlelit), [Astral](previews/index.html#astral), [Verdant](previews/index.html#verdant), [Hedgewitch](previews/index.html#hedgewitch), [Scribe](previews/index.html#scribe), [Forgotten](previews/index.html#forgotten). Serve these files over HTTP; Git hosting may display HTML source rather than render it. If the repository is on a remote machine, forward port 4173 to your browser's machine. Stop the preview with Ctrl+C.
 
 The gallery uses the actual theme CSS in shadow roots with illustrative component specimens. It is **not a screenshot of the live application** or a substitute for testing in your Pi Web version. It needs Python 3 for the included server; any static HTTP server also works. No external fonts, image services, or CDN requests are used.
 
@@ -50,7 +52,7 @@ Requires a Pi Web version supporting **declarative CSS-first themes** and the co
    If you copied the repository elsewhere, use its actual absolute path on that machine. In Docker this must be a path accessible inside the container, preferably on a persistent mount.
 2. Check **Settings → PI WEB plugins** and enable **grimoire** if disabled.
 3. Reload the browser page.
-4. In **Settings → General → Theme**, select any of the six volumes listed above. The handwritten editions use the same installation—no separate font installation is needed.
+4. In **Settings → General → Theme**, select any of the six volumes listed above, or its **· Spellbound** edition. The handwritten editions use the same installation—no separate font installation is needed.
 
 Alternative developer installation: symlink this repository into the gateway's plugin directory (`$PI_WEB_DATA_DIR/plugins`, or `~/.pi-web/plugins` if unset), then reload the browser. For example, on that machine:
 
@@ -71,8 +73,8 @@ To uninstall, first select a built-in theme, then remove the package in Settings
 - Static local SVG textures provide mottling, fibres and foxing across the overall app canvas as well as message surfaces. The canvas texture is softened beneath a 55% base-colour wash; messages retain stronger paper detail and worn edges. Code blocks, inputs, and controls keep solid backgrounds. Shell host selectors (`pi-web-app`, `workspace-panel`) are version-sensitive and should be rechecked on host upgrades; opaque plugin-owned panels can cover the canvas. Inset shading wears the page edges without clipping text or changing hit targets. Forced colours removes the paper effects. Font loading uses `swap`, so prose remains visible while loading.
 - All six themes render main navigation (Sessions, Chat, pinned tools) and workspace tool tabs (Files, Terminal, Git, etc.) as notched ribbon bookmarks. Active ribbons use the theme accent with contrasting text and an underline. Only the decorative backing is clipped: focus outlines, labels, badges and rectangular click targets remain intact. Narrow strips keep horizontal scrolling; navigation-menu and collapse buttons remain ordinary controls. These rules target the version-sensitive `app-mobile-main-tabs` and `workspace-panel` shell hosts, not arbitrary plugin tabs or renderer choices.
 - User messages have a double leading rule; assistant messages a single rule. Current rows and selected choices retain structural cues, not colour alone.
-- Busy sessions receive two quiet 2.4-second illuminations. Hovering the default composer action turns its small diamond seal once. Neither effect changes layout or interaction.
-- Motion is opt-in through `prefers-reduced-motion: no-preference`; reduced-motion users get static decoration. Forced-colour mode keeps borders and a current-row outline.
+- Busy sessions kindle twice (3.2s total in Quiet, 4.4s in Spellbound). Selected bookmark hems catch light, message margins draw a short ink stroke on hover/focus, the default composer seal turns once, and opening menus briefly illuminate their borders. Text, click targets and reading surfaces stay still. No ambient loops or automatic message entrances.
+- All theme-owned motion requires `prefers-reduced-motion: no-preference` and inactive forced colours; changing either preference stops it immediately. Hover effects require real hover capability. Static borders, selection and focus remain. Already-selected/busy elements can animate on mount or theme change—these are decorations, not new-output or success signals.
 - Native focus, disabled/hidden states, labels, popover positioning, and Stop remain owned by Pi Web. No text replacement, click interception, or spellcasting behavior is added.
 
 ## Checks and development
@@ -84,13 +86,15 @@ npm pack --dry-run       # inspect the local package contents; does not publish
 
 Tests check metadata, local assets, restrained motion rules, and WCAG 4.5:1 contrast for primary/secondary/muted and semantic text against the two main opaque surfaces. They are not a blanket accessibility certification: blended surfaces, third-party plugins, focus, responsive layout, and actual host adoption also need browser checks.
 
-`assets/{candlelit,astral,verdant,hedgewitch,scribe,forgotten}.css` define complete palettes; `assets/manuscript.css` adds shared decorations using documented hooks. The three paper editions additionally load `assets/paper.css`, `assets/fonts/`, and `assets/textures/`.
+`assets/{candlelit,astral,verdant,hedgewitch,scribe,forgotten}.css` define complete palettes; `assets/manuscript.css` adds shared decorations using documented hooks. The three paper editions additionally load `assets/paper.css`, `assets/fonts/`, and `assets/textures/`. All volumes load `assets/motion.css`; Spellbound editions append parameter overrides from `assets/spellbound.css`.
 
 Optional browser fixture check (requires a separately available Playwright installation and Chromium):
 
 ```sh
 PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node test/browser.mjs
 # Add --capture to regenerate all six PNG previews.
+PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node test/motion-browser.mjs
+# Additional motion-enabled checks for all twelve editions; temporary port 4175.
 ```
 
 This launches a temporary loopback-only static server on port 4174 and closes it afterward. It checks local font loading, message/canvas paper, solid code/control backgrounds and fonts, mobile overflow, reduced motion, forced colours, and paper removal on theme switching. All six themes also exercise both bookmark strips: selection and hover, keyboard focus, minimum target sizes, horizontal scrolling, RTL, disabled controls, forced-colour cues and exclusions. The gallery tabs are interactive specimens, not navigation into the live app. `previews/` is a standalone specimen gallery, not application code. No build step or runtime dependencies.

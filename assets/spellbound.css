@@ -1,0 +1,14 @@
+/* Explicitly selected theatrical edition. Still finite, still no moving text.
+   Maximum uninterrupted effect: two 2200ms kindling cycles (4.4 seconds). */
+:root {
+  --grimoire-kindling-time: 2200ms;
+  --grimoire-glow: 28%;
+  --grimoire-glow-size: 26px;
+  --grimoire-ribbon-time: 1200ms;
+  --grimoire-sheen: 32%;
+  --grimoire-ink-time: 1100ms;
+  --grimoire-ink-length: 72px;
+  --grimoire-seal-time: 1000ms;
+  --grimoire-seal-start: -315deg;
+  --grimoire-menu-time: 600ms;
+}

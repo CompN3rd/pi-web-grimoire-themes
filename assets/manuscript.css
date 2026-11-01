@@ -1,4 +1,5 @@
-/* Shared binding. Only supported host hooks; no behavior or generated text. */
+/* Shared binding. Documented hooks plus version-sensitive shell tabs.
+   No behavior or generated text. Motion lives in motion.css. */
 :host(chat-view) .chat-message {
   border-radius: var(--grimoire-radius);
   border-inline-start-width: 3px;
@@ -121,24 +122,6 @@
   :host(workspace-panel) .ui-tabs > button.ui-tab:not([data-navigation-trigger])::before {
     background: Canvas;
   }
-}
-/* A brief illumination when a session becomes busy, never an endless pulse.
-   Only shadow changes: no moving text, scroll shifts, overlays or click targets. */
-@media (prefers-reduced-motion: no-preference) {
-  :host(session-list) .ui-nav-row[data-busy="true"] {
-    animation: grimoire-kindling 2400ms ease-in-out 2;
-  }
-  :host(prompt-editor) .ui-composer-actions > [data-default="true"]:not(:disabled):hover::after {
-    animation: grimoire-seal 650ms ease-out 1;
-  }
-}
-@keyframes grimoire-kindling {
-  0%, 100% { box-shadow: inset 3px 0 var(--pi-accent); }
-  50% { box-shadow: inset 3px 0 var(--pi-accent), inset 0 0 14px var(--grimoire-illumination); }
-}
-@keyframes grimoire-seal {
-  from { transform: rotate(-45deg); }
-  to { transform: rotate(45deg); }
 }
 @media (forced-colors: active) {
   :host(chat-view) .chat-message {

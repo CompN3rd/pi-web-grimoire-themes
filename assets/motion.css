@@ -1,0 +1,82 @@
+/* Quiet enchantment. Spellbound changes only these bounded motion parameters.
+   No entrance animation on transcript text: mounting history is not new output. */
+:root {
+  --grimoire-kindling-time: 1600ms;
+  --grimoire-glow: 12%;
+  --grimoire-glow-size: 12px;
+  --grimoire-ribbon-time: 650ms;
+  --grimoire-sheen: 15%;
+  --grimoire-ink-time: 500ms;
+  --grimoire-ink-length: 28px;
+  --grimoire-seal-time: 650ms;
+  --grimoire-seal-start: -45deg;
+  --grimoire-menu-time: 280ms;
+}
+/* All effects stop immediately when either accessibility preference changes.
+   Nothing is hidden and no animation is necessary to understand a state. */
+@media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  :host(session-list) .ui-nav-row[data-busy="true"] {
+    animation: grimoire-kindling var(--grimoire-kindling-time) ease-in-out 2;
+  }
+  :host(app-mobile-main-tabs) .ui-tabs > button.ui-tab:not(:disabled, [data-navigation-trigger]):is(.selected, [aria-pressed="true"], [aria-current="page"])::before,
+  :host(workspace-panel) .ui-tabs > button.ui-tab:not(:disabled, [data-navigation-trigger]):is(.selected, [aria-pressed="true"], [aria-current="page"])::before {
+    background-image: linear-gradient(110deg, transparent 35%, color-mix(in srgb, var(--pi-bg) var(--grimoire-sheen), transparent) 50%, transparent 65%);
+    /* Sweep the notched hem only, never wash out the contrasting label. */
+    background-size: 300% 8px;
+    background-repeat: no-repeat;
+    background-position: -100% 100%;
+    animation: grimoire-ribbon-light var(--grimoire-ribbon-time) ease-out 1;
+  }
+  /* Reserved decoration only; prose, code, selections and hitboxes never move. */
+  :host(chat-view) .chat-message-content::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 10px;
+    inset-block-start: 6px;
+    inline-size: var(--grimoire-ink-length);
+    block-size: 2px;
+    background: var(--pi-accent);
+    transform: scaleX(0);
+    transform-origin: center;
+    pointer-events: none;
+  }
+  :host(chat-view) .chat-message:focus-within .chat-message-content::before {
+    animation: grimoire-ink var(--grimoire-ink-time) ease-out 1;
+  }
+  :host(prompt-editor) .ui-composer-actions > [data-default="true"]:not(:disabled):focus-visible::after {
+    animation: grimoire-seal var(--grimoire-seal-time) ease-out 1;
+  }
+  .ui-popup-panel.ui-menu:popover-open {
+    animation: grimoire-menu-ink var(--grimoire-menu-time) ease-out 1;
+  }
+  /* Hover effects only on devices with real hover, not sticky touch hover. */
+  @media (hover: hover) {
+    :host(chat-view) .chat-message:hover .chat-message-content::before {
+      animation: grimoire-ink var(--grimoire-ink-time) ease-out 1;
+    }
+    :host(prompt-editor) .ui-composer-actions > [data-default="true"]:not(:disabled):hover::after {
+      animation: grimoire-seal var(--grimoire-seal-time) ease-out 1;
+    }
+  }
+}
+@keyframes grimoire-kindling {
+  0%, 100% { box-shadow: inset 3px 0 var(--pi-accent); }
+  50% { box-shadow: inset 3px 0 var(--pi-accent), inset 0 0 var(--grimoire-glow-size) color-mix(in srgb, var(--pi-accent) var(--grimoire-glow), transparent); }
+}
+@keyframes grimoire-ribbon-light {
+  from { background-position: 100% 100%; }
+  to { background-position: -100% 100%; }
+}
+@keyframes grimoire-ink {
+  0% { transform: scaleX(0); opacity: 0; }
+  35%, 70% { transform: scaleX(1); opacity: .65; }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+@keyframes grimoire-seal {
+  from { transform: rotate(var(--grimoire-seal-start)); }
+  to { transform: rotate(45deg); }
+}
+@keyframes grimoire-menu-ink {
+  from { border-color: var(--pi-accent); }
+  to { border-color: var(--pi-border); }
+}

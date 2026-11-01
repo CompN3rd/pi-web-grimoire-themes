@@ -15,13 +15,13 @@ function contrast(a, b) {
   return (high + .05) / (low + .05);
 }
 
-test('declarative-only package with six distinct, locally contained themes', async () => {
+test('declarative-only package with six palettes and two locally contained motion editions each', async () => {
   assert.equal(plugin.id, 'grimoire');
   assert.equal(plugin.browserRoot, 'assets');
   assert.equal(plugin.module, undefined);
   assert.equal(plugin.serverModule, undefined);
-  assert.equal(plugin.themes.length, 6);
-  assert.equal(new Set(plugin.themes.map(t => t.id)).size, 6);
+  assert.equal(plugin.themes.length, 12);
+  assert.equal(new Set(plugin.themes.map(t => t.id)).size, 12);
   for (const theme of plugin.themes) {
     assert.match(theme.id, /^[a-z][a-z0-9.-]*$/);
     assert.ok(['light', 'dark'].includes(theme.colorScheme));
@@ -59,7 +59,7 @@ test('handwritten editions bundle distinct fonts, licensed textures, and code sa
   const papers = new Set();
   for (const id of ['hedgewitch', 'scribe', 'forgotten']) {
     const theme = plugin.themes.find(t => t.id === id);
-    assert.equal(theme.stylesheets.at(-1).path, 'paper.css');
+    assert.ok(theme.stylesheets.some(s => s.path === 'paper.css'));
     const text = await css(`${id}.css`);
     const p = properties(text);
     hands.add(p['--grimoire-hand']); papers.add(p['--grimoire-paper']);
@@ -96,8 +96,28 @@ test('all volumes share scoped ribbon bookmarks with structural selection and fo
   assert.match(text, /color: ButtonText/);
 });
 
+test('motion editions retain the same palette and cap activity at 4.4 seconds', async () => {
+  for (const theme of plugin.themes.filter(t => !t.id.endsWith('-spellbound'))) {
+    const expressive = plugin.themes.find(t => t.id === `${theme.id}-spellbound`);
+    assert.equal(expressive.colorScheme, theme.colorScheme);
+    assert.deepEqual(expressive.stylesheets.slice(0, -1), theme.stylesheets);
+    assert.equal(theme.stylesheets.at(-1).path, 'motion.css');
+    assert.equal(expressive.stylesheets.at(-1).path, 'spellbound.css');
+  }
+  for (const path of ['motion.css', 'spellbound.css']) {
+    const text = await css(path);
+    assert.doesNotMatch(text, /infinite|!important|animation-fill-mode/);
+    const p = properties(text);
+    assert.ok(parseFloat(p['--grimoire-kindling-time']) * 2 <= 4400);
+  }
+  const motion = await css('motion.css');
+  assert.match(motion, /\(prefers-reduced-motion: no-preference\) and \(forced-colors: none\)/);
+  assert.match(motion, /@media \(hover: hover\)/);
+  assert.match(motion, /:popover-open/);
+});
+
 test('decorations preserve native state and limit motion', async () => {
-  const text = await css('manuscript.css');
+  const text = await css('manuscript.css') + await css('motion.css');
   assert.match(text, /prefers-reduced-motion: no-preference/);
   assert.match(text, /forced-colors: active/);
   assert.doesNotMatch(text, /infinite|!important|display:\s*none|visibility:\s*hidden|outline:\s*none/);
