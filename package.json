@@ -1,0 +1,21 @@
+{
+  "name": "pi-web-grimoire-themes",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Three quiet, wizardly manuscript themes for Pi Web.",
+  "license": "MIT",
+  "type": "module",
+  "files": ["assets", "previews", "README.md", "LICENSE"],
+  "scripts": { "test": "node --test test/*.test.mjs", "preview": "python3 -m http.server 4173 --bind 127.0.0.1" },
+  "piWeb": {
+    "plugins": [{
+      "id": "grimoire",
+      "browserRoot": "assets",
+      "themes": [
+        { "id": "candlelit", "name": "Candlelit Folio", "description": "Ivory parchment, oxblood ink, and warm brass illumination.", "colorScheme": "light", "order": 100, "stylesheets": [{ "id": "palette", "path": "candlelit.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }] },
+        { "id": "astral", "name": "Astral Grimoire", "description": "Midnight vellum, lilac ink, and silver celestial rules.", "colorScheme": "dark", "order": 110, "stylesheets": [{ "id": "palette", "path": "astral.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }] },
+        { "id": "verdant", "name": "Verdant Codex", "description": "Forest leather, pale sage lettering, and botanical gold.", "colorScheme": "dark", "order": 120, "stylesheets": [{ "id": "palette", "path": "verdant.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }] }
+      ]
+    }]
+  }
+}

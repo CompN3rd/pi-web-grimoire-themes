@@ -1,0 +1,92 @@
+/* Shared binding. Only supported host hooks; no behavior or generated text. */
+:host(chat-view) .chat-message {
+  border-radius: var(--grimoire-radius);
+  border-inline-start-width: 3px;
+  background-image: linear-gradient(110deg, var(--grimoire-illumination), transparent 65%);
+  box-shadow: inset 0 1px var(--grimoire-rule), inset 0 -1px var(--grimoire-rule);
+}
+:host(chat-view) .chat-message[data-speaker="user"] {
+  border-inline-start-style: double;
+  border-inline-start-width: 5px;
+}
+:host(chat-view) .chat-message[data-speaker="assistant"] {
+  border-inline-start-style: solid;
+}
+:host(chat-view) .chat-message-header {
+  color: var(--pi-text-secondary);
+}
+:host(project-list) .ui-nav-row[data-current="true"],
+:host(workspace-list) .ui-nav-row[data-current="true"],
+:host(session-list) .ui-nav-row[data-current="true"] {
+  box-shadow: inset 3px 0 var(--pi-accent);
+  background-color: var(--pi-selection-bg);
+}
+:host(session-list) .ui-nav-row[data-unread="true"] .ui-nav-row-label {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 4px;
+}
+:host(prompt-editor) .ui-composer-toolbar {
+  border-block-start: 3px var(--grimoire-edge) var(--pi-border);
+}
+:host(prompt-editor) .ui-composer-actions > [data-default] {
+  position: relative;
+}
+:host(prompt-editor) .ui-composer-actions > [data-default="true"]::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: calc(50% - 3px);
+  inset-block-end: 3px;
+  inline-size: 6px;
+  block-size: 6px;
+  border: 1px solid currentColor;
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+:host(pi-web-content-renderer) [data-ui-context="content-views"] > .ui-choice[data-selected="true"],
+:host(autocomplete-menu) [data-ui-context="completions"] > .ui-choice[data-selected="true"] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+}
+.ui-popup-panel.ui-menu {
+  border: 3px double var(--pi-border);
+  border-radius: 4px;
+  box-shadow: 0 6px 20px var(--pi-shadow);
+}
+.ui-menu-item.danger {
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+/* A brief illumination when a session becomes busy, never an endless pulse.
+   Only shadow changes: no moving text, scroll shifts, overlays or click targets. */
+@media (prefers-reduced-motion: no-preference) {
+  :host(session-list) .ui-nav-row[data-busy="true"] {
+    animation: grimoire-kindling 2400ms ease-in-out 2;
+  }
+  :host(prompt-editor) .ui-composer-actions > [data-default="true"]:not(:disabled):hover::after {
+    animation: grimoire-seal 650ms ease-out 1;
+  }
+}
+@keyframes grimoire-kindling {
+  0%, 100% { box-shadow: inset 3px 0 var(--pi-accent); }
+  50% { box-shadow: inset 3px 0 var(--pi-accent), inset 0 0 14px var(--grimoire-illumination); }
+}
+@keyframes grimoire-seal {
+  from { transform: rotate(-45deg); }
+  to { transform: rotate(45deg); }
+}
+@media (forced-colors: active) {
+  :host(chat-view) .chat-message {
+    background-image: none;
+    box-shadow: none;
+    border-inline-start-color: CanvasText;
+  }
+  :host(project-list) .ui-nav-row[data-current="true"],
+  :host(workspace-list) .ui-nav-row[data-current="true"],
+  :host(session-list) .ui-nav-row[data-current="true"] {
+    outline: 1px solid Highlight;
+    outline-offset: -2px;
+  }
+  :host(session-list) .ui-nav-row[data-busy="true"] { animation: none; }
+}

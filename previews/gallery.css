@@ -1,0 +1,13 @@
+* { box-sizing: border-box; }
+body { margin: 0; padding: 36px clamp(16px, 5vw, 72px); background: var(--pi-bg); color: var(--pi-text); font: 17px/1.6 var(--pi-font); }
+header, main, footer { max-width: 1180px; margin-inline: auto; }
+h1 { font-size: clamp(32px, 5vw, 56px); font-weight: 400; line-height: 1.15; margin: 10px 0; }
+h2 { font-size: 20px; font-weight: 400; }
+.eyebrow { color: var(--pi-accent); font: 12px/1.5 var(--pi-mono); letter-spacing: .16em; }
+select { margin: 8px; padding: 8px; max-width: 100%; background: var(--pi-surface); color: var(--pi-text); border: 1px solid var(--pi-border); font: inherit; }
+main { display: grid; grid-template-columns: 235px minmax(0, 1fr); margin-block: 32px; border-block: 1px solid var(--pi-border); }
+aside { padding: 16px; border-inline-end: 1px solid var(--pi-border-muted); }
+section { padding: 24px; min-width: 0; }
+.note, footer { font-size: 14px; color: var(--pi-muted); }
+footer { padding-bottom: 24px; }
+@media (max-width: 680px) { body { padding: 20px 12px; } main { grid-template-columns: 1fr; } aside { border-inline-end: 0; border-block-end: 1px solid var(--pi-border-muted); } section { padding: 16px 0; } select { margin-inline: 0; display: block; } }

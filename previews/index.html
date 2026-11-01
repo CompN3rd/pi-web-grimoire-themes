@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grimoire · Theme specimen</title>
+  <link id="palette" rel="stylesheet" href="../assets/candlelit.css">
+  <link rel="stylesheet" href="gallery.css">
+  <script type="module" src="gallery.js"></script>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">GRIMOIRE / A PI WEB THEME COLLECTION</p>
+    <h1 id="title">Candlelit Folio</h1>
+    <p id="description">Ivory parchment, oxblood ink, and warm brass illumination.</p>
+    <label>Open a volume <select id="theme"><option value="candlelit">Candlelit Folio · light</option><option value="astral">Astral Grimoire · dark</option><option value="verdant">Verdant Codex · dark</option></select></label>
+  </header>
+  <main>
+    <aside><h2>The library</h2><session-list></session-list><p class="note">A quiet glow marks active work. The small seal turns on hover. Reduced motion disables both.</p></aside>
+    <section aria-label="Conversation specimen"><chat-view></chat-view><pi-web-content-renderer></pi-web-content-renderer><prompt-editor></prompt-editor></section>
+  </main>
+  <footer>Illustrative component specimens, not a live Pi Web screenshot. Uses the shipped palettes and manuscript CSS in shadow roots; layout scaffolding is preview-only. No requests leave this server.</footer>
+</body>
+</html>
