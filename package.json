@@ -1,8 +1,8 @@
 {
   "name": "pi-web-grimoire-themes",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "Three quiet, wizardly manuscript themes for Pi Web.",
+  "description": "Six wizardly Pi Web themes, including locally bundled handwritten paper volumes.",
   "license": "MIT",
   "type": "module",
   "files": ["assets", "previews", "README.md", "LICENSE"],
@@ -12,6 +12,9 @@
       "id": "grimoire",
       "browserRoot": "assets",
       "themes": [
+        { "id": "hedgewitch", "name": "Hedgewitch’s Journal", "description": "Casual handwritten field notes on mottled cream paper.", "colorScheme": "light", "order": 130, "stylesheets": [{ "id": "palette", "path": "hedgewitch.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "paper", "path": "paper.css", "order": 300 }] },
+        { "id": "scribe", "name": "Scribe’s Spellbook", "description": "Calligraphic ink on aged golden parchment.", "colorScheme": "light", "order": 140, "stylesheets": [{ "id": "palette", "path": "scribe.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "paper", "path": "paper.css", "order": 300 }] },
+        { "id": "forgotten", "name": "Forgotten Folio", "description": "Slanted ink on faded, foxed paper with worn edges.", "colorScheme": "light", "order": 150, "stylesheets": [{ "id": "palette", "path": "forgotten.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "paper", "path": "paper.css", "order": 300 }] },
         { "id": "candlelit", "name": "Candlelit Folio", "description": "Ivory parchment, oxblood ink, and warm brass illumination.", "colorScheme": "light", "order": 100, "stylesheets": [{ "id": "palette", "path": "candlelit.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }] },
         { "id": "astral", "name": "Astral Grimoire", "description": "Midnight vellum, lilac ink, and silver celestial rules.", "colorScheme": "dark", "order": 110, "stylesheets": [{ "id": "palette", "path": "astral.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }] },
         { "id": "verdant", "name": "Verdant Codex", "description": "Forest leather, pale sage lettering, and botanical gold.", "colorScheme": "dark", "order": 120, "stylesheets": [{ "id": "palette", "path": "verdant.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }] }

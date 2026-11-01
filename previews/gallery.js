@@ -45,6 +45,9 @@ for (const [tag, markup] of Object.entries(templates)) {
   });
 }
 const themes = {
+  hedgewitch: ['Hedgewitch’s Journal', 'Casual handwritten field notes on mottled cream paper.', 'light'],
+  scribe: ['Scribe’s Spellbook', 'Calligraphic ink on aged golden parchment.', 'light'],
+  forgotten: ['Forgotten Folio', 'Slanted ink on faded, foxed paper with worn edges.', 'light'],
   candlelit: ['Candlelit Folio', 'Ivory parchment, oxblood ink, and warm brass illumination.', 'light'],
   astral: ['Astral Grimoire', 'Midnight vellum, lilac ink, and silver celestial rules.', 'dark'],
   verdant: ['Verdant Codex', 'Forest leather, pale sage lettering, and botanical gold.', 'dark']
@@ -53,6 +56,16 @@ const select = document.querySelector('#theme');
 function choose(id) {
   if (!Object.hasOwn(themes, id)) id = 'candlelit';
   select.value = id;
+  for (const tag of Object.keys(templates)) {
+    const root = document.querySelector(tag).shadowRoot;
+    root.querySelector('[data-paper]')?.remove();
+    if (['hedgewitch', 'scribe', 'forgotten'].includes(id)) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet'; link.href = '../assets/paper.css';
+      link.dataset.paper = '';
+      root.append(link);
+    }
+  }
   document.querySelector('#palette').href = `../assets/${id}.css`;
   document.documentElement.style.colorScheme = themes[id][2];
   document.querySelector('#title').textContent = themes[id][0];

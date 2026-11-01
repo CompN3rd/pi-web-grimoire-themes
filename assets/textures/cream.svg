@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="420" viewBox="0 0 420 420">
+<!-- Original procedural paper texture, MIT; see ../../LICENSE. -->
+<filter id="paper"><feTurbulence type="fractalNoise" baseFrequency=".018 .03" numOctaves="4" seed="23" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 .43 0 0 0 0 .32 0 0 0 0 .14 0 0 0 .18 0"/></filter>
+<rect width="420" height="420" filter="url(#paper)"/>
+<g stroke="#887645" stroke-opacity=".12" stroke-width=".6"><path d="m30 63 9 2m67 140 7-3m184-87 14 1M63 350l11-2m244-20 8 3M202 44l3 8m-23 238 8 2"/></g>
+</svg>

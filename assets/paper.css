@@ -1,0 +1,30 @@
+/* Handwritten variants only. UI stays sans-serif; prose inherits the hand. */
+:host(chat-view) .chat-message {
+  background-image: var(--grimoire-paper), linear-gradient(90deg, var(--grimoire-wear), transparent 7%, transparent 93%, var(--grimoire-wear));
+  background-size: 420px 420px, 100% 100%;
+  border-radius: 3px 9px 5px 2px;
+  box-shadow: inset 0 2px 5px var(--grimoire-wear), inset 0 -3px 7px var(--grimoire-wear);
+}
+:host(chat-view) .chat-message-body {
+  font-family: var(--grimoire-hand);
+  font-size: var(--grimoire-hand-size);
+  line-height: 1.55;
+}
+/* Native semantic elements, including code inside participating renderer roots.
+   No transforms, italic synthesis or letter spacing on technical text. */
+pre, code, kbd, samp {
+  font-family: var(--pi-mono);
+  font-size: 13px;
+  font-style: normal;
+  line-height: 1.6;
+}
+:host(chat-view) .chat-message-header,
+button, input, textarea, select {
+  font-family: var(--pi-font);
+}
+@media (forced-colors: active) {
+  :host(chat-view) .chat-message {
+    background-image: none;
+    box-shadow: none;
+  }
+}

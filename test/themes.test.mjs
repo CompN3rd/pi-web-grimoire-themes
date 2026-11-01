@@ -15,13 +15,13 @@ function contrast(a, b) {
   return (high + .05) / (low + .05);
 }
 
-test('declarative-only package with three distinct, locally contained themes', async () => {
+test('declarative-only package with six distinct, locally contained themes', async () => {
   assert.equal(plugin.id, 'grimoire');
   assert.equal(plugin.browserRoot, 'assets');
   assert.equal(plugin.module, undefined);
   assert.equal(plugin.serverModule, undefined);
-  assert.equal(plugin.themes.length, 3);
-  assert.equal(new Set(plugin.themes.map(t => t.id)).size, 3);
+  assert.equal(plugin.themes.length, 6);
+  assert.equal(new Set(plugin.themes.map(t => t.id)).size, 6);
   for (const theme of plugin.themes) {
     assert.match(theme.id, /^[a-z][a-z0-9.-]*$/);
     assert.ok(['light', 'dark'].includes(theme.colorScheme));
@@ -29,7 +29,12 @@ test('declarative-only package with three distinct, locally contained themes', a
     for (const sheet of theme.stylesheets) {
       assert.match(sheet.path, /^[a-z-]+\.css$/);
       assert.ok((await stat(new URL(`../assets/${sheet.path}`, import.meta.url))).size < 2 * 1024 * 1024);
-      assert.doesNotMatch(await css(sheet.path), /@import|https?:|url\(/i);
+      const text = await css(sheet.path);
+      assert.doesNotMatch(text, /@import|https?:/i);
+      for (const [, path] of text.matchAll(/url\("([^"\n]+)"\)/g)) {
+        assert.match(path, /^\.\/(fonts|textures)\/[^/]+\.(ttf|svg)$/);
+        assert.ok((await stat(new URL(`../assets/${path}`, import.meta.url))).size > 0);
+      }
     }
   }
 });
@@ -48,6 +53,33 @@ for (const theme of plugin.themes) {
     assert.ok(contrast(p['--pi-text'], p['--pi-selection-bg']) >= 4.5);
   });
 }
+
+test('handwritten editions bundle distinct fonts, licensed textures, and code safeguards', async () => {
+  const hands = new Set();
+  const papers = new Set();
+  for (const id of ['hedgewitch', 'scribe', 'forgotten']) {
+    const theme = plugin.themes.find(t => t.id === id);
+    assert.equal(theme.stylesheets.at(-1).path, 'paper.css');
+    const text = await css(`${id}.css`);
+    const p = properties(text);
+    hands.add(p['--grimoire-hand']); papers.add(p['--grimoire-paper']);
+    assert.match(text, /@font-face/); assert.match(text, /font-display: swap/);
+    assert.match(p['--pi-font'], /system-ui/);
+  }
+  assert.equal(hands.size, 3); assert.equal(papers.size, 3);
+  for (const family of ['caveat', 'charm', 'marckscript']) {
+    assert.match(await css(`fonts/${family}-OFL.txt`), /SIL OPEN FONT LICENSE Version 1.1/);
+  }
+  for (const texture of ['cream', 'parchment', 'foxing']) {
+    const svg = await css(`textures/${texture}.svg`);
+    assert.match(svg, /Original procedural/);
+    assert.doesNotMatch(svg, /<script|<image|href=/);
+  }
+  const paper = await css('paper.css');
+  assert.match(paper, /font-family: var\(--pi-mono\)/);
+  assert.match(paper, /forced-colors: active/);
+  assert.doesNotMatch(paper, /!important|animation:|transform:/);
+});
 
 test('decorations preserve native state and limit motion', async () => {
   const text = await css('manuscript.css');

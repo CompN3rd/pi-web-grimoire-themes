@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">
+<!-- Original procedural foxing texture, MIT; see ../../LICENSE. -->
+<filter id="paper"><feTurbulence type="fractalNoise" baseFrequency=".024" numOctaves="3" seed="41" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 .39 0 0 0 0 .30 0 0 0 0 .19 0 0 0 .19 0"/></filter>
+<radialGradient id="spot"><stop stop-color="#915b32" stop-opacity=".22"/><stop offset=".55" stop-color="#a77940" stop-opacity=".12"/><stop offset="1" stop-color="#a77940" stop-opacity="0"/></radialGradient>
+<rect width="500" height="500" filter="url(#paper)"/>
+<g fill="url(#spot)"><circle cx="28" cy="32" r="13"/><circle cx="42" cy="52" r="7"/><circle cx="19" cy="92" r="5"/><circle cx="468" cy="133" r="18"/><circle cx="445" cy="158" r="6"/><circle cx="102" cy="439" r="12"/><circle cx="77" cy="455" r="6"/><circle cx="272" cy="238" r="4"/><circle cx="370" cy="367" r="8"/></g>
+</svg>
