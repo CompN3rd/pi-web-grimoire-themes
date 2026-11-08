@@ -44,6 +44,9 @@ for (const theme of plugin.themes) {
     const p = properties(await css(theme.stylesheets[0].path));
     for (const token of ['font', 'mono', 'bg', 'surface', 'text', 'accent', 'danger', 'success', 'warning', 'terminal-bg', 'terminal-text', 'chat-user-bg', 'chat-conversation-bg', 'thinking', 'tool']) assert.ok(p[`--pi-${token}`], token);
     assert.match(p['--pi-mono'], /monospace/);
+    assert.deepEqual(theme.loadingScreen, {
+      background: p['--pi-bg'], foreground: p['--pi-text'], logo: p['--pi-accent'],
+    });
     for (const fg of ['text', 'text-secondary', 'muted', 'accent', 'danger', 'warning', 'success', 'thinking', 'tool', 'syntax-comment', 'syntax-keyword', 'syntax-string', 'syntax-number', 'syntax-title']) {
       for (const bg of ['bg', 'surface']) {
         const ratio = contrast(p[`--pi-${fg}`], p[`--pi-${bg}`]);

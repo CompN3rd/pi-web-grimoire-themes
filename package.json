@@ -5,31 +5,398 @@
   "description": "Six wizardly Pi Web palettes, each with Quiet and Spellbound motion editions.",
   "license": "MIT",
   "type": "module",
-  "files": ["assets", "previews", "README.md", "MOTION.md", "LICENSE"],
-  "scripts": { "test": "node --test test/*.test.mjs", "preview": "python3 -m http.server 4173 --bind 127.0.0.1" },
+  "files": [
+    "assets",
+    "previews",
+    "README.md",
+    "docs",
+    "MOTION.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "test:compat": "node test/host-compat.mjs",
+    "test:browser": "node test/browser.mjs && node test/motion-browser.mjs && node test/host-browser.mjs && node quill-prototype/test/browser.mjs",
+    "preview": "python3 -m http.server 4173 --bind 127.0.0.1"
+  },
   "piWeb": {
-    "plugins": [{
-      "id": "grimoire",
-      "browserRoot": "assets",
-      "themes": [
-        { "id": "candlelit", "name": "Candlelit Folio", "description": "Ivory parchment, oxblood ink, and quiet enchantment.", "colorScheme": "light", "order": 100, "stylesheets": [{ "id": "palette", "path": "candlelit.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "motion", "path": "motion.css", "order": 400 }] },
-        { "id": "candlelit-spellbound", "name": "Candlelit Folio · Spellbound", "description": "The same volume with more theatrical, finite magical motion.", "colorScheme": "light", "order": 101, "stylesheets": [{ "id": "palette", "path": "candlelit.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "motion", "path": "motion.css", "order": 400 }, { "id": "spellbound", "path": "spellbound.css", "order": 500 }] },
-        { "id": "astral", "name": "Astral Grimoire", "description": "Midnight vellum, lilac ink, and quiet enchantment.", "colorScheme": "dark", "order": 110, "stylesheets": [{ "id": "palette", "path": "astral.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "motion", "path": "motion.css", "order": 400 }] },
-        { "id": "astral-spellbound", "name": "Astral Grimoire · Spellbound", "description": "The same volume with more theatrical, finite magical motion.", "colorScheme": "dark", "order": 111, "stylesheets": [{ "id": "palette", "path": "astral.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "motion", "path": "motion.css", "order": 400 }, { "id": "spellbound", "path": "spellbound.css", "order": 500 }] },
-        { "id": "verdant", "name": "Verdant Codex", "description": "Forest leather, sage lettering, and quiet enchantment.", "colorScheme": "dark", "order": 120, "stylesheets": [{ "id": "palette", "path": "verdant.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "motion", "path": "motion.css", "order": 400 }] },
-        { "id": "verdant-spellbound", "name": "Verdant Codex · Spellbound", "description": "The same volume with more theatrical, finite magical motion.", "colorScheme": "dark", "order": 121, "stylesheets": [{ "id": "palette", "path": "verdant.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "motion", "path": "motion.css", "order": 400 }, { "id": "spellbound", "path": "spellbound.css", "order": 500 }] },
-        { "id": "hedgewitch", "name": "Hedgewitch’s Journal", "description": "Casual handwriting, mottled cream paper, and quiet enchantment.", "colorScheme": "light", "order": 130, "stylesheets": [{ "id": "palette", "path": "hedgewitch.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "paper", "path": "paper.css", "order": 300 }, { "id": "motion", "path": "motion.css", "order": 400 }] },
-        { "id": "hedgewitch-spellbound", "name": "Hedgewitch’s Journal · Spellbound", "description": "The same volume with more theatrical, finite magical motion.", "colorScheme": "light", "order": 131, "stylesheets": [{ "id": "palette", "path": "hedgewitch.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "paper", "path": "paper.css", "order": 300 }, { "id": "motion", "path": "motion.css", "order": 400 }, { "id": "spellbound", "path": "spellbound.css", "order": 500 }] },
-        { "id": "scribe", "name": "Scribe’s Spellbook", "description": "Calligraphic ink, golden parchment, and quiet enchantment.", "colorScheme": "light", "order": 140, "stylesheets": [{ "id": "palette", "path": "scribe.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "paper", "path": "paper.css", "order": 300 }, { "id": "motion", "path": "motion.css", "order": 400 }] },
-        { "id": "scribe-spellbound", "name": "Scribe’s Spellbook · Spellbound", "description": "The same volume with more theatrical, finite magical motion.", "colorScheme": "light", "order": 141, "stylesheets": [{ "id": "palette", "path": "scribe.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "paper", "path": "paper.css", "order": 300 }, { "id": "motion", "path": "motion.css", "order": 400 }, { "id": "spellbound", "path": "spellbound.css", "order": 500 }] },
-        { "id": "forgotten", "name": "Forgotten Folio", "description": "Slanted ink, faded foxed paper, and quiet enchantment.", "colorScheme": "light", "order": 150, "stylesheets": [{ "id": "palette", "path": "forgotten.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "paper", "path": "paper.css", "order": 300 }, { "id": "motion", "path": "motion.css", "order": 400 }] },
-        { "id": "forgotten-spellbound", "name": "Forgotten Folio · Spellbound", "description": "The same volume with more theatrical, finite magical motion.", "colorScheme": "light", "order": 151, "stylesheets": [{ "id": "palette", "path": "forgotten.css", "order": 100 }, { "id": "manuscript", "path": "manuscript.css", "order": 200 }, { "id": "paper", "path": "paper.css", "order": 300 }, { "id": "motion", "path": "motion.css", "order": 400 }, { "id": "spellbound", "path": "spellbound.css", "order": 500 }] }
-      ]
-    }, {
-      "id": "grimoire-language",
-      "browserRoot": "assets/language",
-      "module": "pi-web-plugin.js",
-      "defaultEnabled": false
-    }]
+    "plugins": [
+      {
+        "id": "grimoire",
+        "browserRoot": "assets",
+        "themes": [
+          {
+            "id": "candlelit",
+            "name": "Candlelit Folio",
+            "description": "Ivory parchment, oxblood ink, and quiet enchantment.",
+            "colorScheme": "light",
+            "order": 100,
+            "loadingScreen": { "background": "#f6edd9", "foreground": "#35291f", "logo": "#843e32" },
+            "stylesheets": [
+              {
+                "id": "palette",
+                "path": "candlelit.css",
+                "order": 100
+              },
+              {
+                "id": "manuscript",
+                "path": "manuscript.css",
+                "order": 200
+              },
+              {
+                "id": "motion",
+                "path": "motion.css",
+                "order": 400
+              }
+            ]
+          },
+          {
+            "id": "candlelit-spellbound",
+            "name": "Candlelit Folio · Spellbound",
+            "description": "The same volume with more theatrical, finite magical motion.",
+            "colorScheme": "light",
+            "order": 101,
+            "loadingScreen": { "background": "#f6edd9", "foreground": "#35291f", "logo": "#843e32" },
+            "stylesheets": [
+              {
+                "id": "palette",
+                "path": "candlelit.css",
+                "order": 100
+              },
+              {
+                "id": "manuscript",
+                "path": "manuscript.css",
+                "order": 200
+              },
+              {
+                "id": "motion",
+                "path": "motion.css",
+                "order": 400
+              },
+              {
+                "id": "spellbound",
+                "path": "spellbound.css",
+                "order": 500
+              }
+            ]
+          },
+          {
+            "id": "astral",
+            "name": "Astral Grimoire",
+            "description": "Midnight vellum, lilac ink, and quiet enchantment.",
+            "colorScheme": "dark",
+            "order": 110,
+            "loadingScreen": { "background": "#171724", "foreground": "#e7e0f2", "logo": "#c5b0f3" },
+            "stylesheets": [
+              {
+                "id": "palette",
+                "path": "astral.css",
+                "order": 100
+              },
+              {
+                "id": "manuscript",
+                "path": "manuscript.css",
+                "order": 200
+              },
+              {
+                "id": "motion",
+                "path": "motion.css",
+                "order": 400
+              }
+            ]
+          },
+          {
+            "id": "astral-spellbound",
+            "name": "Astral Grimoire · Spellbound",
+            "description": "The same volume with more theatrical, finite magical motion.",
+            "colorScheme": "dark",
+            "order": 111,
+            "loadingScreen": { "background": "#171724", "foreground": "#e7e0f2", "logo": "#c5b0f3" },
+            "stylesheets": [
+              {
+                "id": "palette",
+                "path": "astral.css",
+                "order": 100
+              },
+              {
+                "id": "manuscript",
+                "path": "manuscript.css",
+                "order": 200
+              },
+              {
+                "id": "motion",
+                "path": "motion.css",
+                "order": 400
+              },
+              {
+                "id": "spellbound",
+                "path": "spellbound.css",
+                "order": 500
+              }
+            ]
+          },
+          {
+            "id": "verdant",
+            "name": "Verdant Codex",
+            "description": "Forest leather, sage lettering, and quiet enchantment.",
+            "colorScheme": "dark",
+            "order": 120,
+            "loadingScreen": { "background": "#15231e", "foreground": "#e4ead4", "logo": "#dec88b" },
+            "stylesheets": [
+              {
+                "id": "palette",
+                "path": "verdant.css",
+                "order": 100
+              },
+              {
+                "id": "manuscript",
+                "path": "manuscript.css",
+                "order": 200
+              },
+              {
+                "id": "motion",
+                "path": "motion.css",
+                "order": 400
+              }
+            ]
+          },
+          {
+            "id": "verdant-spellbound",
+            "name": "Verdant Codex · Spellbound",
+            "description": "The same volume with more theatrical, finite magical motion.",
+            "colorScheme": "dark",
+            "order": 121,
+            "loadingScreen": { "background": "#15231e", "foreground": "#e4ead4", "logo": "#dec88b" },
+            "stylesheets": [
+              {
+                "id": "palette",
+                "path": "verdant.css",
+                "order": 100
+              },
+              {
+                "id": "manuscript",
+                "path": "manuscript.css",
+                "order": 200
+              },
+              {
+                "id": "motion",
+                "path": "motion.css",
+                "order": 400
+              },
+              {
+                "id": "spellbound",
+                "path": "spellbound.css",
+                "order": 500
+              }
+            ]
+          },
+          {
+            "id": "hedgewitch",
+            "name": "Hedgewitch’s Journal",
+            "description": "Casual handwriting, mottled cream paper, and quiet enchantment.",
+            "colorScheme": "light",
+            "order": 130,
+            "loadingScreen": { "background": "#f6f0df", "foreground": "#35291f", "logo": "#395a3e" },
+            "stylesheets": [
+              {
+                "id": "palette",
+                "path": "hedgewitch.css",
+                "order": 100
+              },
+              {
+                "id": "manuscript",
+                "path": "manuscript.css",
+                "order": 200
+              },
+              {
+                "id": "paper",
+                "path": "paper.css",
+                "order": 300
+              },
+              {
+                "id": "motion",
+                "path": "motion.css",
+                "order": 400
+              }
+            ]
+          },
+          {
+            "id": "hedgewitch-spellbound",
+            "name": "Hedgewitch’s Journal · Spellbound",
+            "description": "The same volume with more theatrical, finite magical motion.",
+            "colorScheme": "light",
+            "order": 131,
+            "loadingScreen": { "background": "#f6f0df", "foreground": "#35291f", "logo": "#395a3e" },
+            "stylesheets": [
+              {
+                "id": "palette",
+                "path": "hedgewitch.css",
+                "order": 100
+              },
+              {
+                "id": "manuscript",
+                "path": "manuscript.css",
+                "order": 200
+              },
+              {
+                "id": "paper",
+                "path": "paper.css",
+                "order": 300
+              },
+              {
+                "id": "motion",
+                "path": "motion.css",
+                "order": 400
+              },
+              {
+                "id": "spellbound",
+                "path": "spellbound.css",
+                "order": 500
+              }
+            ]
+          },
+          {
+            "id": "scribe",
+            "name": "Scribe’s Spellbook",
+            "description": "Calligraphic ink, golden parchment, and quiet enchantment.",
+            "colorScheme": "light",
+            "order": 140,
+            "loadingScreen": { "background": "#f4dfaa", "foreground": "#35291f", "logo": "#76382c" },
+            "stylesheets": [
+              {
+                "id": "palette",
+                "path": "scribe.css",
+                "order": 100
+              },
+              {
+                "id": "manuscript",
+                "path": "manuscript.css",
+                "order": 200
+              },
+              {
+                "id": "paper",
+                "path": "paper.css",
+                "order": 300
+              },
+              {
+                "id": "motion",
+                "path": "motion.css",
+                "order": 400
+              }
+            ]
+          },
+          {
+            "id": "scribe-spellbound",
+            "name": "Scribe’s Spellbook · Spellbound",
+            "description": "The same volume with more theatrical, finite magical motion.",
+            "colorScheme": "light",
+            "order": 141,
+            "loadingScreen": { "background": "#f4dfaa", "foreground": "#35291f", "logo": "#76382c" },
+            "stylesheets": [
+              {
+                "id": "palette",
+                "path": "scribe.css",
+                "order": 100
+              },
+              {
+                "id": "manuscript",
+                "path": "manuscript.css",
+                "order": 200
+              },
+              {
+                "id": "paper",
+                "path": "paper.css",
+                "order": 300
+              },
+              {
+                "id": "motion",
+                "path": "motion.css",
+                "order": 400
+              },
+              {
+                "id": "spellbound",
+                "path": "spellbound.css",
+                "order": 500
+              }
+            ]
+          },
+          {
+            "id": "forgotten",
+            "name": "Forgotten Folio",
+            "description": "Slanted ink, faded foxed paper, and quiet enchantment.",
+            "colorScheme": "light",
+            "order": 150,
+            "loadingScreen": { "background": "#ede9df", "foreground": "#35291f", "logo": "#484b66" },
+            "stylesheets": [
+              {
+                "id": "palette",
+                "path": "forgotten.css",
+                "order": 100
+              },
+              {
+                "id": "manuscript",
+                "path": "manuscript.css",
+                "order": 200
+              },
+              {
+                "id": "paper",
+                "path": "paper.css",
+                "order": 300
+              },
+              {
+                "id": "motion",
+                "path": "motion.css",
+                "order": 400
+              }
+            ]
+          },
+          {
+            "id": "forgotten-spellbound",
+            "name": "Forgotten Folio · Spellbound",
+            "description": "The same volume with more theatrical, finite magical motion.",
+            "colorScheme": "light",
+            "order": 151,
+            "loadingScreen": { "background": "#ede9df", "foreground": "#35291f", "logo": "#484b66" },
+            "stylesheets": [
+              {
+                "id": "palette",
+                "path": "forgotten.css",
+                "order": 100
+              },
+              {
+                "id": "manuscript",
+                "path": "manuscript.css",
+                "order": 200
+              },
+              {
+                "id": "paper",
+                "path": "paper.css",
+                "order": 300
+              },
+              {
+                "id": "motion",
+                "path": "motion.css",
+                "order": 400
+              },
+              {
+                "id": "spellbound",
+                "path": "spellbound.css",
+                "order": 500
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "grimoire-language",
+        "browserRoot": "assets/language",
+        "module": "pi-web-plugin.js",
+        "defaultEnabled": false
+      }
+    ]
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12",
+    "playwright": "1.64.1"
   }
 }

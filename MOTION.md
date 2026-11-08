@@ -50,4 +50,4 @@ PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node test/browser.mjs
 PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node test/motion-browser.mjs
 ```
 
-The motion check exercises all twelve selections with motion enabled, samples live animation timelines, verifies stable hitbox geometry, checks immediate reduced-motion/forced-colour interruption, switches editions, dismisses native popovers, and checks touch behaviour. The two scripts use temporary loopback servers on ports 4174 and 4175 respectively, stopped on exit. No live installation or restart is performed.
+The motion check exercises all twelve selections with motion enabled, samples live animation timelines, verifies stable hitbox geometry, checks immediate reduced-motion/forced-colour interruption, switches editions, dismisses native popovers, and checks touch behaviour. The two scripts use temporary loopback servers on dynamically assigned ports, stopped on exit. See [Compatibility checks](docs/compatibility.md) for tool setup and real-host shell checks. No live installation or restart is performed.

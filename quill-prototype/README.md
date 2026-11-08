@@ -34,4 +34,4 @@ The quill uses actual browser Range rectangles at the latest displayed character
 
 ## Checks
 
-`node quill-prototype/test/browser.mjs` runs Chromium checks using Playwright. Set `PLAYWRIGHT_MODULE` to an absolute module path if Playwright is not at the local shared path used by this repository. The test starts and stops its own loopback-only HTTP server. These are isolated component/entry-contract checks, not proof of live-instance installation.
+`node quill-prototype/test/browser.mjs` runs Chromium checks using Playwright. Run `npm ci` at the repository root and `npx playwright install chromium` first, or set `PLAYWRIGHT_MODULE` to an absolute module path to use another Playwright installation. The test starts and stops its own loopback-only HTTP server. These are isolated component/entry-contract checks, not proof of live-instance installation.

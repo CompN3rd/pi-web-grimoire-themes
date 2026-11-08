@@ -1,16 +1,10 @@
 // Optional fixture check: PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node test/browser.mjs
 // Add --capture to refresh all six PNG specimens.
 import assert from 'node:assert/strict';
-import { spawn } from 'node:child_process';
-import { pathToFileURL } from 'node:url';
-const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).href);
-const server = spawn('python3', ['-m', 'http.server', '4174', '--bind', '127.0.0.1'], { stdio: 'ignore' });
+import { chromium, serve } from './browser-support.mjs';
+const server = await serve();
 let browser;
 try {
-  for (let i = 0; ; i++) {
-    try { await fetch('http://127.0.0.1:4174/previews/'); break; }
-    catch (error) { if (i === 30) throw error; await new Promise(r => setTimeout(r, 100)); }
-  }
   browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1440, height: 1200 }, reducedMotion: 'reduce' });
   const errors = [];
@@ -18,7 +12,7 @@ try {
   page.on('response', r => { if (!r.ok() && r.status() !== 304) errors.push(`${r.status()} ${r.url()}`); });
   page.on('request', r => assert.equal(new URL(r.url()).hostname, '127.0.0.1'));
   for (const [id, font] of [['hedgewitch', 'Caveat'], ['scribe', 'Charm'], ['forgotten', 'Marck Script']]) {
-    await page.goto(`http://127.0.0.1:4174/previews/#${id}`);
+    await page.goto(`${server.url}previews/#${id}`);
     await page.waitForFunction(() => [...document.querySelectorAll('chat-view')].every(e => e.shadowRoot.querySelector('[data-paper]')?.sheet));
     await page.evaluate(async font => { await document.fonts.load(`22px "${font}"`); await document.fonts.ready; }, font);
     const result = await page.evaluate(font => {
@@ -53,7 +47,7 @@ try {
     console.log(`${id}: local font, paper/canvas, solid code/controls, reduced motion, mobile, forced colours, removal passed`);
   }
   for (const id of ['candlelit', 'astral', 'verdant', 'hedgewitch', 'scribe', 'forgotten']) {
-    await page.goto(`http://127.0.0.1:4174/previews/#${id}`);
+    await page.goto(`${server.url}previews/#${id}`);
     await page.evaluate(async () => { await document.fonts.ready; });
     for (const host of ['app-mobile-main-tabs', 'workspace-panel']) {
       const selected = page.locator(`${host} button[aria-pressed="true"]`);
@@ -96,5 +90,5 @@ try {
   }
   assert.deepEqual(errors, []);
 } finally {
-  await browser?.close(); server.kill();
+  await browser?.close(); await server.close();
 }

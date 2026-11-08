@@ -43,7 +43,7 @@ The gallery uses the actual theme CSS in shadow roots with illustrative componen
 
 ## Install locally
 
-Requires a Pi Web version supporting **declarative CSS-first themes** and the conversation/navigation/composer styling hooks. Authored against the documentation and bundled palettes shipped with `@jmfederico/pi-web` **1.202610.9**. Older runtime-only theme hosts are unsupported; styling outside the host's supported contract remains version-sensitive.
+Requires a Pi Web version supporting **declarative CSS-first themes** and the conversation/navigation/composer styling hooks. Originally authored against `@jmfederico/pi-web` **1.202610.9**; upgrade checks against **1.202611.1** are described in [Compatibility checks](docs/compatibility.md). Older runtime-only theme hosts are unsupported; styling outside the host's supported contract remains version-sensitive.
 
 1. In Pi Web's **Settings → Pi packages**, on the **gateway machine**, install this local package source:
    ```text
@@ -114,15 +114,6 @@ Tests check metadata, local assets, restrained motion rules, and WCAG 4.5:1 cont
 
 `assets/{candlelit,astral,verdant,hedgewitch,scribe,forgotten}.css` define complete palettes; `assets/manuscript.css` adds shared decorations using documented hooks. The three paper editions additionally load `assets/paper.css`, `assets/fonts/`, and `assets/textures/`. All volumes load `assets/motion.css`; Spellbound editions append parameter overrides from `assets/spellbound.css`.
 
-Optional browser fixture check (requires a separately available Playwright installation and Chromium):
-
-```sh
-PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node test/browser.mjs
-# Add --capture to regenerate all six PNG previews.
-PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node test/motion-browser.mjs
-# Additional motion-enabled checks for all twelve editions; temporary port 4175.
-```
-
-This launches a temporary loopback-only static server on port 4174 and closes it afterward. It checks local font loading, message/canvas paper, solid code/control backgrounds and fonts, mobile overflow, reduced motion, forced colours, and paper removal on theme switching. All six themes also exercise both bookmark strips: selection and hover, keyboard focus, minimum target sizes, horizontal scrolling, RTL, disabled controls, forced-colour cues and exclusions. The gallery tabs are interactive specimens, not navigation into the live app. `previews/` is a standalone specimen gallery, not application code. No build step or runtime dependencies.
+[Compatibility checks](docs/compatibility.md) covers Chromium checks, current-host catalog/metadata validation, and isolated tests against real PI WEB shell components. The checks use temporary loopback servers without installing the plugin or connecting to a session daemon. `previews/` remains an illustrative gallery, not the live application. No plugin build step or runtime dependencies.
 
 CSS, gallery, and original procedural textures are MIT licensed. Bundled fonts retain their SIL OFL 1.1 licenses and copyright notices; see [asset attribution](assets/ATTRIBUTION.md). Local delivery only; no remote repository or published package is implied.

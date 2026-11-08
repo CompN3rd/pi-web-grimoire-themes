@@ -96,6 +96,9 @@ class QuillDemo extends HTMLElement {
   }
   tick() {
     if (!this.running || !this.isConnected) return;
+    // Also check at the playback boundary: a delayed media-query event must not
+    // keep scheduling ink after the preference has already changed.
+    if (this.motion.matches) { this.finish(); return; }
     const span = document.createElement('span');
     span.textContent = SAMPLE[this.index++];
     span.className = 'fresh';

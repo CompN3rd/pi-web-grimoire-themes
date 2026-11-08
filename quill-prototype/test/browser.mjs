@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE || '/data/projects/pi-web-pendant-theme/node_modules/@playwright/test/index.mjs'));
+const { chromium } = await import(process.env.PLAYWRIGHT_MODULE
+  ? pathToFileURL(process.env.PLAYWRIGHT_MODULE).href : 'playwright');
 const root = new URL('../', import.meta.url);
 const server = createServer(async (req, res) => {
   try {
@@ -50,7 +51,10 @@ try {
   await page.waitForTimeout(100);
   assert((await measure()).count > paused);
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.waitForFunction(() => document.querySelector('grimoire-quill-prototype').status.textContent.startsWith('Complete. Reduced motion'));
+  await page.waitForFunction(() => document.querySelector('grimoire-quill-prototype').status.textContent.startsWith('Complete. Reduced motion')).catch(async error => {
+    console.error(await page.locator('grimoire-quill-prototype').evaluate(el => ({ running: el.running, reducedMotion: el.motion.matches, status: el.status.textContent, count: el.index })), errors);
+    throw error;
+  });
   const sample = await page.evaluate(async () => (await import('./browser/plugin.js')).SAMPLE);
   assert.equal(await page.locator('.text').textContent(), sample);
   assert.equal(await page.locator('.quill').evaluate(el => getComputedStyle(el).display), 'none');
@@ -65,6 +69,15 @@ try {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await start.click();
   await page.waitForTimeout(100);
+  // A missed/delayed media change event must still stop playback at the next tick.
+  await page.locator('grimoire-quill-prototype').evaluate(el => el.motion.removeEventListener('change', el.onMotion));
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.waitForFunction(() => document.querySelector('grimoire-quill-prototype').status.textContent.startsWith('Complete. Reduced motion'));
+  assert.equal(await page.locator('.text').textContent(), sample);
+  await page.locator('grimoire-quill-prototype').evaluate(el => el.motion.addEventListener('change', el.onMotion));
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await start.click();
+  await page.waitForFunction(() => document.querySelector('grimoire-quill-prototype').index > 1);
   await page.evaluate(() => window.previewLifetime.abort());
   const aborted = (await measure()).count;
   await page.waitForTimeout(150);

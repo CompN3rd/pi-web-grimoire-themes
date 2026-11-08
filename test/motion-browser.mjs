@@ -1,15 +1,9 @@
 // Optional: PLAYWRIGHT_MODULE=/absolute/path/to/playwright/index.mjs node test/motion-browser.mjs
 import assert from 'node:assert/strict';
-import { spawn } from 'node:child_process';
-import { pathToFileURL } from 'node:url';
-const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).href);
-const server = spawn('python3', ['-m', 'http.server', '4175', '--bind', '127.0.0.1'], { stdio: 'ignore' });
+import { chromium, serve } from './browser-support.mjs';
+const server = await serve();
 let browser;
 try {
-  for (let i = 0; ; i++) {
-    try { await fetch('http://127.0.0.1:4175/previews/'); break; }
-    catch (error) { if (i === 30) throw error; await new Promise(r => setTimeout(r, 100)); }
-  }
   browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1280, height: 1000 }, reducedMotion: 'no-preference' });
   const errors = [];
@@ -31,7 +25,7 @@ try {
     for (const mode of ['quiet', 'spellbound']) {
       const suffix = mode === 'quiet' ? '' : '-spellbound';
       const duration = mode === 'quiet' ? 1600 : 2200;
-      await page.goto(`http://127.0.0.1:4175/previews/#${id}${suffix}`);
+      await page.goto(`${server.url}previews/#${id}${suffix}`);
       await page.waitForFunction(expected => getComputedStyle(document.documentElement).getPropertyValue('--grimoire-kindling-time').trim() === expected, `${duration}ms`);
       assert.equal(await style(busy, 'animationName'), 'grimoire-kindling');
       assert.equal(await style(busy, 'animationIterationCount'), '2');
@@ -95,7 +89,7 @@ try {
     }
   }
   const touch = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'no-preference' });
-  await touch.goto('http://127.0.0.1:4175/previews/#scribe-spellbound');
+  await touch.goto(`${server.url}previews/#scribe-spellbound`);
   assert.equal(await touch.evaluate(() => matchMedia('(hover: hover)').matches), false);
   await touch.locator('chat-view .chat-message').first().tap();
   assert.equal(await touch.locator('chat-view .chat-message-content').first().evaluate(e => getComputedStyle(e, '::before').animationName), 'none');
@@ -103,5 +97,5 @@ try {
   console.log('Touch: no sticky-hover ink animation and no horizontal page overflow');
   assert.deepEqual(errors, []);
 } finally {
-  await browser?.close(); server.kill();
+  await browser?.close(); await server.close();
 }
